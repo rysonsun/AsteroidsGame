@@ -1,5 +1,6 @@
 Spaceship bob = new Spaceship();
 Star [] space = new Star[200];
+ArrayList <Asteroid> theList = new ArrayList <Asteroid>();
 public void setup() 
 {
   size(500, 500);
@@ -12,29 +13,47 @@ public void setup()
 }
 public void draw() 
 {
-  noStroke();  
-  background(0);
-  for (int i = 0; i < space.length; i++)
+    background(0);
+    Asteroid thing = new Asteroid();
+    theList.add(thing);
+  for (int i = 0; i < 5; i++)
   {
-    space[i].show();
-    bob.show();
+      theList.add(new Asteroid());
+      theList.get(i).accelerate((double)(Math.random()*10)-5);
   }
-  bob.show();
-  bob.move();
+  for(int y=0; y<6; y++)
+  {
+    theList.get(y).show();
+    theList.get(y).move();
+  }
+  
+  for(int y=0; y< theList.size(); y++)
+  {
+ 
+    {
+      theList.remove(y);
+    }
+   }
+    for(int i=0; i< space.length; i++)
+    {
+      space[i].show();
+      bob.show();
+    }
+    bob.move();
 }
-
-public void keyPressed()
+       
+  public void keyPressed()
 {
   if (key == 'w') {
-    bob.accelerate(2);
-  }
-  if (key == 's') {
-    bob.accelerate(-2);
-  }
-  if (key == 'd') {
-    bob.turn(10);
+    bob.accelerate(1);
   }
   if (key == 'a') {
-    bob.turn(-10);
+    bob.turn(-15);
+  }
+  if (key == 'd') {
+    bob.turn(15);
+  }
+  if (key == 's') {
+    bob.accelerate(-1);
   }
 }  
