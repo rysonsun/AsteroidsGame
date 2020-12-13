@@ -1,59 +1,82 @@
 Spaceship bob = new Spaceship();
-Star [] space = new Star[200];
-ArrayList <Asteroid> theList = new ArrayList <Asteroid>();
+Star [] ship;
+ArrayList <Asteroid> astro = new ArrayList <Asteroid>(10);
+ArrayList <Bullet> but = new ArrayList <Bullet>();
+int x = 0;
+//your variable declarations here
 public void setup() 
 {
   size(500, 500);
-  for (int i = 0; i < space.length; i++)
-  {
-    space[i] = new Star();
-  }
+  background(0);
   bob.accelerate(0);
-  bob.turn(90);
+  ship = new Star[500];
+  for (int i = 0; i<ship.length; i++) {
+    ship[i]= new Star();
+  }
+  for (int i = 0; i<11; i++) {
+    astro.add(new Asteroid());
+    //astro.get(i).accelerate((double)(Math.random()*10)-5);
+  }
+  frameRate(60);
 }
 public void draw() 
 {
-    background(0);
-    Asteroid thing = new Asteroid();
-    theList.add(thing);
-  for (int i = 0; i < 5; i++)
-  {
-      theList.add(new Asteroid());
-      theList.get(i).accelerate((double)(Math.random()*10)-5);
+  noStroke();
+  background(0);
+  for (int i = 0; i<ship.length; i++) {
+    ship[i].show();
   }
-  for(int y=0; y<6; y++)
-  {
-    theList.get(y).show();
-    theList.get(y).move();
+  bob.move();
+  bob.show();
+
+  for (int i = 0; i<astro.size(); i++) {
+
+    if (dist((float)astro.get(i).getACenterX(), (float)astro.get(i).getACenterY(), (float)bob.getCenterX(), (float)bob.getCenterY())< 20 + 5) {
+      astro.remove(i);
+      x = x - 5;
+    } else {
+      astro.get(i).move();
+      astro.get(i).show();
+    }
   }
-  
-  for(int y=0; y< theList.size(); y++)
-  {
- 
-    {
-      theList.remove(y);
+  for (int i = 0; i<but.size(); i++) {
+    for (int m = 0; m<astro.size(); m++) {
+      if (dist((float)astro.get(m).getACenterX(), (float)astro.get(m).getACenterY(), (float)but.get(i).getBCenterX(), (float)but.get(i).getBCenterY())<20 +5) {
+        astro.remove(m);
+        but.remove(i);
+        x = x + 10;
+        break;
+      } else {
+        but.get(i).show();
+        but.get(i).move();
+      }
     }
-   }
-    for(int i=0; i< space.length; i++)
-    {
-      space[i].show();
-      bob.show();
-    }
-    bob.move();
+  }
+  fill(599, 100, 100);
+  text(" Score: " + x, 50, 50);
+  if (astro.size() < 5) {
+    astro.add(new Asteroid());
+  }
 }
-       
-  public void keyPressed()
-{
-  if (key == 'w') {
-    bob.accelerate(1);
+
+
+public void keyPressed() {
+  if (key == 'h')
+  {
+    bob.setXspeed(0);
+    bob.setCenterX((int)(Math.random()*600));
+    bob.setCenterY((int)(Math.random()*600));
+  } else if (key == 'w')
+  {
+    bob.accelerate(+.5);
+  } else if (key == 's')
+  {
+    bob.accelerate(-.3);
+  } else if (key == 'd') {
+    bob.turn(10);
+  } else if (key == 'a') {
+    bob.turn(-10);
+  } else if ( key == ' ') {
+    but.add(new Bullet(bob));
   }
-  if (key == 'a') {
-    bob.turn(-15);
-  }
-  if (key == 'd') {
-    bob.turn(15);
-  }
-  if (key == 's') {
-    bob.accelerate(-1);
-  }
-}  
+}
